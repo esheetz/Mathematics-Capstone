@@ -37,9 +37,9 @@ def remove_extra_space(str):
 
 # FOR TESTS, UNCOMMENT FOLLOWING LINES:
 
-test_str = "a\n b\n c\n d\n e\n f"
-test_str_prep = remove_extra_space(test_str)
-print(test_str_prep + "\n")
+#test_str = "a\n b\n c\n d\n e\n f"
+#test_str_prep = remove_extra_space(test_str)
+#print(test_str_prep + "\n")
 
 
 
@@ -89,14 +89,14 @@ def text_prep(str):
 
 # FOR TESTS, UNCOMMENT FOLLOWING LINES:
 
-test_str1 = "Hello world. I am trying to test something.\nI\'m very proud. Here we go >>><<<!!#$!"
-test_str2 = "~`@#$%^&*()_-+={}[]|\<>/"
-
-test_str1_prep = text_prep(test_str1)
-test_str2_prep = text_prep(test_str2)
-
-print(test_str1_prep + "\n")
-print(test_str2_prep + "\n")
+#test_str1 = "Hello world. I am trying to test something.\nI\'m very proud. Here we go >>><<<!!#$!"
+#test_str2 = "~`@#$%^&*()_-+={}[]|\<>/"
+#
+#test_str1_prep = text_prep(test_str1)
+#test_str2_prep = text_prep(test_str2)
+#
+#print(test_str1_prep + "\n")
+#print(test_str2_prep + "\n")
 
 
 
