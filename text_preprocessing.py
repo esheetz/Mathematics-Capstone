@@ -1,4 +1,5 @@
 # FUNCTIONS FOR TEXT PREPROCESSING
+# MATHEMATICS CAPSTONE
 
 # gets the text out of a .txt file into a string
 # input: file_name, the full path name of the file to be read
@@ -17,6 +18,10 @@ def remove_extra_space(str):
     # length of string
     length = len(str)
     
+    # if string is empty, no white space needs to be removed
+    if length == 0:
+        return str
+    
     # initialize processed string, will accumulate processed characters
     str_prep = str[0]
     
@@ -32,17 +37,18 @@ def remove_extra_space(str):
 
 # FOR TESTS, UNCOMMENT FOLLOWING LINES:
 
-#test_str = "a\n b\n c\n d\n e\n f"
-#test_str_prep = remove_extra_space(test_str)
-#print(test_str_prep + "\n")
+test_str = "a\n b\n c\n d\n e\n f"
+test_str_prep = remove_extra_space(test_str)
+print(test_str_prep + "\n")
 
 
 
 # preprocesses text
 # input: str, unprocessed string
 # output: processed string
-#   removes anything that is not an alphanumeric character,
-#   space, or select punctuaion: , . ! ? ' " : ; ( ) -
+#   removes anything that is not a lowercase letter or space
+#   changes capital letters to lowercase letters
+#   removes punctuation and numbers
 # sentences are separated with newlines
 def text_prep(str):
     # length of string
@@ -54,14 +60,12 @@ def text_prep(str):
     # loop through characters in string
     for i in range(0, length):
         # if in character vocabulary, accumulate character in str_prep
-        if (str[i].isalpha() or
-            str[i].isdigit() or
-            str[i] == "." or str[i] == "!" or str[i] == "?" or
-            str[i] == " " or str[i] == "," or
-            str[i] == "\'" or str[i] == "\"" or
-            str[i] == ":" or str[i] == ";" or
-            str[i] == "(" or str[i] == ")" or str[i] == "-"):
+        if (str[i].islower() or str[i] == " "):
             str_prep = str_prep + str[i]
+            
+        # change capital letters to lowercase
+        if (str[i].isupper()):
+            str_prep = str_prep + str[i].lower()
         
         # if end of sentence, add newline
         if (str[i] == "." or str[i] == "!" or str[i] == "?"):
@@ -75,24 +79,24 @@ def text_prep(str):
     str_prep = remove_extra_space(str_prep)
     
     # catch common errors
-    str_prep = str_prep.replace("Mr.\n", "Mr. ")
-    str_prep = str_prep.replace("Ms.\n", "Ms. ")
-    str_prep = str_prep.replace("Mrs.\n", "Mrs. ")
-    str_prep = str_prep.replace("Dr.\n", "Dr. ")
+    str_prep = str_prep.replace(" mr\n", " mr ")
+    str_prep = str_prep.replace(" ms\n", " ms ")
+    str_prep = str_prep.replace(" mrs\n", " mrs. ")
+    str_prep = str_prep.replace(" dr\n", " dr ")
             
     # return output
     return str_prep
 
 # FOR TESTS, UNCOMMENT FOLLOWING LINES:
 
-#test_str1 = "Hello world. I am trying to test something.\nI\'m very proud. Here we go >>><<<!!#$!"
-#test_str2 = "~`@#$%^&*()_-+={}[]|\<>/"
-#
-#test_str1_prep = text_prep(test_str1)
-#test_str2_prep = text_prep(test_str2)
-#
-#print(test_str1_prep + "\n")
-#print(test_str2_prep + "\n")
+test_str1 = "Hello world. I am trying to test something.\nI\'m very proud. Here we go >>><<<!!#$!"
+test_str2 = "~`@#$%^&*()_-+={}[]|\<>/"
+
+test_str1_prep = text_prep(test_str1)
+test_str2_prep = text_prep(test_str2)
+
+print(test_str1_prep + "\n")
+print(test_str2_prep + "\n")
 
 
 
