@@ -81,7 +81,7 @@ def text_prep(str):
     # catch common errors
     str_prep = str_prep.replace(" mr\n", " mr ")
     str_prep = str_prep.replace(" ms\n", " ms ")
-    str_prep = str_prep.replace(" mrs\n", " mrs. ")
+    str_prep = str_prep.replace(" mrs\n", " mrs ")
     str_prep = str_prep.replace(" dr\n", " dr ")
             
     # return output
@@ -89,14 +89,17 @@ def text_prep(str):
 
 # FOR TESTS, UNCOMMENT FOLLOWING LINES:
 
-#test_str1 = "Hello world. I am trying to test something.\nI\'m very proud. Here we go >>><<<!!#$!"
-#test_str2 = "~`@#$%^&*()_-+={}[]|\<>/"
-#
-#test_str1_prep = text_prep(test_str1)
-#test_str2_prep = text_prep(test_str2)
-#
-#print(test_str1_prep + "\n")
-#print(test_str2_prep + "\n")
+test_str1 = "Hello world. I am trying to test something.\nI\'m very proud. Here we go >>><<<!!#$!"
+test_str2 = "~`@#$%^&*()_-+={}[]|\<>/"
+test_str3 = "I said, \"I am trying something intereseting.\" Hello. \"If only.\" "
+
+test_str1_prep = text_prep(test_str1)
+test_str2_prep = text_prep(test_str2)
+test_str3_prep = text_prep(test_str3)
+
+print(test_str1_prep + "\n")
+print(test_str2_prep + "\n")
+print(test_str3_prep + "\n")
 
 
 
