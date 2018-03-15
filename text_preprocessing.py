@@ -144,9 +144,9 @@ def text_prep(str):
         if (str[i].isupper()):
             str_prep = str_prep + str[i].lower()
         
-        # if end of sentence, add space
+        # if end of sentence, add newline
         if (str[i] == "." or str[i] == "!" or str[i] == "?"):
-            str_prep = str_prep + " "
+            str_prep = str_prep + "\n"
         
         # if newline, add a space
         if str[i] == "\n":
