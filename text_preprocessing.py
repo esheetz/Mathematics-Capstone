@@ -144,9 +144,9 @@ def text_prep(str):
         if (str[i].isupper()):
             str_prep = str_prep + str[i].lower()
         
-        # if end of sentence, add newline
+        # if end of sentence, add space
         if (str[i] == "." or str[i] == "!" or str[i] == "?"):
-            str_prep = str_prep + "\n"
+            str_prep = str_prep + " "
         
         # if newline, add a space
         if str[i] == "\n":
@@ -154,12 +154,12 @@ def text_prep(str):
     
     # catch common errors
     # incorrectly finding ends of sentences
-    str_prep = str_prep.replace(" mr\n", " mr ")
-    str_prep = str_prep.replace(" ms\n", " ms ")
-    str_prep = str_prep.replace(" mrs\n", " mrs ")
-    str_prep = str_prep.replace(" dr\n", " dr ")
-    str_prep = str_prep.replace(" jr\n", " jr ")
-    str_prep = str_prep.replace(" st\n", " st ")
+#    str_prep = str_prep.replace(" mr\n", " mr ")
+#    str_prep = str_prep.replace(" ms\n", " ms ")
+#    str_prep = str_prep.replace(" mrs\n", " mrs ")
+#    str_prep = str_prep.replace(" dr\n", " dr ")
+#    str_prep = str_prep.replace(" jr\n", " jr ")
+#    str_prep = str_prep.replace(" st\n", " st ")
     # replacing multiple spaces with one
     str_prep = str_prep.replace("  ", " ")
         
