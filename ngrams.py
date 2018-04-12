@@ -1,3 +1,8 @@
+# FUNCTIONS FOR BUILDING AND USING NGRAM MODELS
+# MATHEMATICS CAPSTONE
+
+
+
 #from nltk.corpus import reuters
 from nltk import bigrams, trigrams
 from collections import defaultdict
@@ -16,10 +21,9 @@ f_name = "D:/Mathematics-Capstone/math-training-data.txt"
 
 # generates an n-gram model
 # input: file_name, the full path name of the file containing the training dataset
-# input: n, integer specifies n-gram model (either 2, 3, or 4)
-# input: prob_est, string specifies probability estimator (either MLE or ELE)
+# input: n, integer specifies n-gram model (either 2, 3, 4, 5)
 # output: n-gram model
-def gen_model(file_name, n, prob_est):
+def gen_model(file_name, n):
     # open file
     file = open(file_name, 'r')
     
@@ -30,7 +34,6 @@ def gen_model(file_name, n, prob_est):
     if n == 2:
         # initialize bigram list
         bgs = []
-        count = 0
         
         # iterate through each sentence in file, listing bigrams
         while sentence != '':
@@ -39,14 +42,9 @@ def gen_model(file_name, n, prob_est):
             tokens = sentence.split(' ')
             bgs.extend(list(bigrams(tokens, pad_left = True, pad_right = True)))
             sentence = file.readline()
-            count += 1
-            #print(count)
             
         # close file
         file.close()
-        
-        # number of trigrams in dataset
-        N = len(bgs)
         
         # initialize model    
         model = defaultdict(lambda: defaultdict(lambda: 0))
@@ -55,35 +53,17 @@ def gen_model(file_name, n, prob_est):
         for bg in bgs:
             model[bg[0]][bg[1]] += 1
         
-        # MLE
-        if prob_est == "MLE":
-            # P_mle(w1...wn) = freq/total_count
-            # make bigram counts probabilities
-            for w1 in model:
-                total_count = sum(model[w1].values())
-                for w2 in model[w1]:
-                    model[w1][w2] /= total_count
-                
-        elif prob_est == "ELE":
-            # P_ele(w1...wn) = (freq + lamb)/(total_count + (B*lamb))
-            B = len(model) # number of equivalence classes (determined by n-1 words)
-            lamb = 0.5 # determines amount of extra probability space left over
-            
-            # make bigram counts probabilities
-            for w1 in model:
-                for w2 in model[w1]:
-                    model[w1][w2] += lamb
-                    model[w1][w2] /= (N + (B*lamb))
-        
-        else:
-            print("invalid prob_est")
-            return
+        # make bigram counts probabilities using MLE
+        # P_mle(w1...wn) = freq/total_count
+        for w1 in model:
+            total_count = sum(model[w1].values())
+            for w2 in model[w1]:
+                model[w1][w2] /= total_count
     
     # TRIGRAMS
     elif n == 3:
         # initialize trigram list
         tgs = []
-        count = 0
         
         # iterate through each sentence in file, listing trigrams
         while sentence != '':
@@ -92,14 +72,9 @@ def gen_model(file_name, n, prob_est):
             tokens = sentence.split(' ')
             tgs.extend(list(trigrams(tokens, pad_left = True, pad_right = True)))
             sentence = file.readline()
-            count += 1
-            #print(count)
             
         # close file
         file.close()
-        
-        # number of trigrams in dataset
-        N = len(tgs)
         
         # initialize model    
         model = defaultdict(lambda: defaultdict(lambda: 0))
@@ -108,41 +83,110 @@ def gen_model(file_name, n, prob_est):
         for tg in tgs:
             model[(tg[0], tg[1])][tg[2]] += 1
         
-        # MLE
-        if prob_est == "MLE":
-            # P_mle(w1...wn) = freq/total_count
-            # make trigram counts probabilities
-            for w1_w2 in model:
-                total_count = sum(model[w1_w2].values())
-                for w3 in model[w1_w2]:
-                    model[w1_w2][w3] /= total_count
+        # make trigram counts probabilities using MLE
+        # P_mle(w1...wn) = freq/total_count
+        for w1_w2 in model:
+            total_count = sum(model[w1_w2].values())
+            for w3 in model[w1_w2]:
+                model[w1_w2][w3] /= total_count
                 
-        elif prob_est == "ELE":
-            # P_ele(w1...wn) = (freq + lamb)/(total_count + (B*lamb))
-            B = len(model) # number of equivalence classes (determined by n-1 words)
-            lamb = 0.5 # determines amount of extra probability space left over
-            
-            # make trigram counts probabilities
-            for w1_w2 in model:
-                total_count = sum(model[w1_w2].values())
-                for w3 in model[w1_w2]:
-                    model[w1_w2][w3] += lamb
-                    model[w1_w2][w3] /= (N + (B*lamb))
-                    
-        else:
-            print("invalid prob_est")
-            return
-                
+    # 4-GRAMS
     elif n == 4:
-        print("not written")
+        # initialize 4-gram list
+        fgs = []
         
-    # if n is not 2, 3, 4
+        # iterate through each sentence in file, listing 4-grams
+        while sentence != '':
+            # remove newline at end of sentence
+            sentence = sentence[:len(sentence)-1]
+            tokens = sentence.split(' ')
+            sent_fgs = get_sent_fgs(tokens, n)
+            fgs.extend(sent_fgs)
+            sentence = file.readline()
+            
+        # close file
+        file.close()
+        
+        # initialize model
+        model = defaultdict(lambda: defaultdict(lambda: 0))
+        
+        # put 4-gram counts in model
+        for fg in fgs:
+            model[(fg[0], fg[1], fg[2])][fg[3]] += 1
+            
+        # make 4-gram counts probabilities using MLE
+        # P_mle(w1...wn) = freq/total_count
+        for w1_w2_w3 in model:
+            total_count = sum(model[w1_w2_w3].values())
+            for w4 in model[w1_w2_w3]:
+                model[w1_w2_w3][w4] /= total_count
+                
+    elif n == 5:
+        # initialize 5-gram list
+        fgs = []
+        
+        # iterate through each sentence in file, listing 5-grams
+        while sentence != '':
+            # remove newline at end of sentence
+            sentence = sentence[:len(sentence)-1]
+            tokens = sentence.split(' ')
+            sent_fgs = get_sent_fgs(tokens, n)
+            fgs.extend(sent_fgs)
+            sentence = file.readline()
+            
+        # close file
+        file.close()
+        
+        # initialize model
+        model = defaultdict(lambda: defaultdict(lambda: 0))
+        
+        # put 5-gram counts in model
+        for fg in fgs:
+            model[(fg[0], fg[1], fg[2], fg[3])][fg[4]] += 1
+        
+        # make 5-gram counts probabilities using MLE
+        # P_mle(w1...wn) = freq/total_count
+        for w1_w2_w3_w4 in model:
+            total_count = sum(model[w1_w2_w3_w4].values())
+            for w5 in model[w1_w2_w3_w4]:
+                model[w1_w2_w3_w4][w5] /= total_count
+        
+    # if n is not 2, 3, 4, 5
     else:
-        print("invalid n")
+        print("invalid n:", n)
         return
     
     # return the model
     return model
+
+# parses a sentence into a list of tuples representing the n-grams
+# input: tokens, the tokenized sentence
+# input: n, integer specifies the n-grams
+# output: the n-grams of a particular sentence (list of tuples)
+def get_sent_fgs(tokens, n):
+    sent_fgs = []
+    l = len(tokens)
+    for i in range(l + (n-1)):
+        if i < (n-1) and i < l:
+            fg = [None] * ((n-1)-i)
+            fg.extend(tokens[0:i+1])
+            fg = tuple(fg)
+            sent_fgs.append(fg)
+        elif i > (l-1):
+            if l > n:
+                fg = tokens[-(n-(i-(l-1))):]
+                fg.extend([None] * (i-(l-1)))
+            else: # l <= n
+                fg = [None] * ((n-(i-(l-1)))-l)
+                fg.extend(tokens[-(n-(i-(l-1))):])
+                fg.extend([None]* (i-(l-1)))
+            fg = tuple(fg)
+            sent_fgs.append(fg)
+        else:
+            fg = tokens[i-(n-1):i+1]
+            fg = tuple(fg)
+            sent_fgs.append(fg)
+    return sent_fgs
 
 # generates a text sample
 # input: n-gram model
@@ -157,25 +201,14 @@ def gen_text(model, n):
     
     # generate text
     while not sentence_finished:
-#        if n == 2:
-#            word = random.sample(list(model[text[len(text)-1]]), 1)
-#        if n == 3:
-#            word = random.sample(list(model[tuple(text[-(n-1):])]), 1)
-#        text.append(word)
-        # random probability threshold and initialize probability accumulator
-        r = random.random()
-        accumulator = 0.0
-        
-        # loop through possible next word given previous n-1 words
-        for word in model[tuple(text[-(n-1):])].keys():
-            # accumulate probability
-            accumulator += model[tuple(text[-(n-1):])][word] * 10000
-            
-            # if probability is over threshold
-            if accumulator >= r:
-                # add word to text, stop looping through possible next words
-                text.append(word)
-                break
+        if n == 2:
+            word = random.sample(list(model[text[len(text)-1]]), 1)
+        elif n == 3 or n == 4 or n == 5:
+            word = random.sample(list(model[tuple(text[-(n-1):])]), 1)
+        else:
+            print("invalid n:", n)
+            return
+        text.extend(word)
         
         # if the last n-1 generated words are None
         if text[-(n-1):] == [None] * (n-1):
@@ -183,7 +216,22 @@ def gen_text(model, n):
             sentence_finished = True
     
     # create text string
-    str = ' '.join([t for t in text if t])
+    sent = ' '.join([t for t in text if t])
     
     # return string
-    return str
+    return sent
+
+# generates several text samples using an n-gram model and writes to file
+# input: model, the n-gram model to use to generate text
+# input: n, integer representing the n-gram model
+# input: numSamps, the number of text samples to generate
+# input: write_file, the full path of the file to write to
+# output: string indicating that text has been written to file
+def gen_n_text_samples(model, n, num_samps, write_file):
+    file = open(write_file, 'a')
+    for i in range(num_samps):
+        sent = gen_text(model, n)
+        file.write(sent + '\n')
+    file.close()
+    return str(num_samps) + " text samples written to " + write_file
+    

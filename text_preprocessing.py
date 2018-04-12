@@ -11,7 +11,7 @@
 # input: read_file, the full path name of the file to be read and prepped
 # output: the number of characters written to the file
 def prep_text_file(read_file):
-    write_file = "D:/Mathematics-Capstone/math-training-data.txt"
+    write_file = "D:/Mathematics-Capstone/math-training-data.txt" #"D:/Mathematics-Capstone/math-testing-data.txt"
     str = get_text(read_file)
     prepped_str = text_prep(str)
     numChars = write_str_to_file(prepped_str, write_file)
