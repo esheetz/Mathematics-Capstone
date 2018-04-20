@@ -7,7 +7,9 @@ from nltk import bigrams, trigrams
 import random
 import math
 from text_preprocessing import dataset_info
-from ngrams import get_sent_fgs
+from ngrams import get_sent_fgs, gen_model
+
+train_file = "D:/Mathematics-Capstone/math-training-data.txt"
 
 bg_file_name = "D:/Mathematics-Capstone/text-samples/2gram-text-samples.txt"
 tg_file_name = "D:/Mathematics-Capstone/text-samples/3gram-text-samples.txt"
@@ -15,6 +17,7 @@ frg_file_name = "D:/Mathematics-Capstone/text-samples/4gram-text-samples.txt"
 fvg_file_name = "D:/Mathematics-Capstone/text-samples/5gram-text-samples.txt"
 
 eval_file = "D:/Mathematics-Capstone/math-testing-data.txt"
+eval_samples = "D:/Mathematics-Capstone/text-samples/eval-samples.txt"
 
 # gets random text samples from file
 # input: file_name, the full path of the file to be read from
@@ -85,7 +88,7 @@ def perplexity(model, n, sent):
     elif n == 5:
         for gram in grams:
             if model[(gram[0], gram[1], gram[2], gram[3])][gram[4]] != 0:
-                H += math.log2(model[(gram[0], gram[1], gram[2], gram[3])][gram[4]])  
+                H += math.log2(model[(gram[0], gram[1], gram[2], gram[3])][gram[4]])
     H /= N
     H = -H
     
@@ -93,6 +96,32 @@ def perplexity(model, n, sent):
     # PPL = 2^H
     ppl = math.pow(2, H)
     return [H, ppl]
+
+# computes the average perplexity of a model based on samples in given file
+# input: model, the model to be evaluated
+# input: n, integer representing n-gram model
+# input: file_name, the full path of file containing samples to compute perplexity
+# output: average cross entropy of the model
+# output: average perplexity of the model
+# output: list of cross entopies and perplexities (tuples) for each text sample
+def ave_perplexity(model, n, file_name):
+    numSamps, _, _ = dataset_info(file_name)
+    ppl_list = []
+    ave_H = 0
+    ave_ppl = 0
+    f = open(file_name, 'r')
+    samp = f.readline()
+    while samp != '':
+        samp = samp[:len(samp)-1]
+        H, ppl = perplexity(model, n, samp)
+        ppl_list.append([H, ppl])
+        ave_H += H
+        ave_ppl += ppl
+        samp = f.readline()
+    ave_H /= numSamps
+    ave_ppl /= numSamps
+    f.close()
+    return [ave_H, ave_ppl, ppl_list]
 
 # computes the probability of a particular text sample
 # input: model, the model to be evaluated

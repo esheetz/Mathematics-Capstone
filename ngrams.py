@@ -9,6 +9,10 @@ from collections import defaultdict
 import random
 
 f_name = "D:/Mathematics-Capstone/math-training-data.txt"
+f_name_kafka = "D:/Mathematics-Capstone/math-kafka-data.txt"
+f_name_poe = "D:/Mathematics-Capstone/math-poe-data.txt"
+f_name_prest = "D:/Mathematics-Capstone/math-prest-data.txt"
+f_name_stoker = "D:/Mathematics-Capstone/math-stoker-data.txt"
 #file = open("D:/Mathematics-Capstone/math-training-data.txt",'r')
 #text = file.read()
 
